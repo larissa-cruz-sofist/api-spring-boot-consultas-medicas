@@ -35,9 +35,9 @@ public class Consulta {
     
     private Boolean ativo;
     
-    public Consulta(DadosAgendamentoConsulta dados) {
-    	this.ativo = true;
-    }
+    //public Consulta(DadosAgendamentoConsulta dados) {
+    	//this.ativo = true;
+    //}
     
     
 }
