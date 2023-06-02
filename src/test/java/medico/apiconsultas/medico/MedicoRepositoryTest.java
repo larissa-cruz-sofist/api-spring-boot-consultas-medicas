@@ -33,7 +33,7 @@ class MedicoRepositoryTest {
 		//when
         var medico = cadastrarMedico("Medico", "medico@voll.med", "123456", Especialidade.CARDIOLOGIA);
         var paciente = cadastrarPaciente("Paciente", "paciente@email.com", "00000000000");
-        cadastrarConsulta(medico, paciente, proximaSegundaAs10);
+        cadastrarConsulta(medico, paciente, proximaSegundaAs10, true);
 		
         //then ou assert
 		var medicoLivre = medicoRepository.escolherMedicoAleatorioLivreNaData(Especialidade.CARDIOLOGIA, proximaSegundaAs10);
@@ -52,8 +52,8 @@ class MedicoRepositoryTest {
 	}
 	
 	
-	 private void cadastrarConsulta(Medico medico, Paciente paciente, LocalDateTime data) {
-	        em.persist(new Consulta(null, medico, paciente, data));
+	 private void cadastrarConsulta(Medico medico, Paciente paciente, LocalDateTime data, Boolean ativo) {
+	        em.persist(new Consulta(null, medico, paciente, data, ativo));
 	    }
 
 	    private Medico cadastrarMedico(String nome, String email, String crm, Especialidade especialidade) {

@@ -32,4 +32,12 @@ public class Consulta {
     private Paciente paciente;
 
     private LocalDateTime data;
+    
+    private Boolean ativo;
+    
+    public Consulta(DadosAgendamentoConsulta dados) {
+    	this.ativo = true;
+    }
+    
+    
 }
