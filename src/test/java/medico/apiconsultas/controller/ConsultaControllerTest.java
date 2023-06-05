@@ -3,6 +3,7 @@ package medico.apiconsultas.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.time.LocalDateTime;
@@ -51,7 +52,7 @@ public class ConsultaControllerTest {
     }
   	
     @Test
-    @DisplayName("Deveria devolver codigo http 200 quando informacoes estao validas")
+    @DisplayName("Deveria devolver codigo http 200 quando informacoes estao validas - cadastrar consulta")
     @WithMockUser
     void agendar_cenario2() throws Exception {
         var data = LocalDateTime.now().plusHours(1);
@@ -78,5 +79,27 @@ public class ConsultaControllerTest {
 
         assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
     }
+    
+    @Test
+    @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir consulta")
+    @WithMockUser
+    void excluir_cenario1() throws Exception {
+        var response = mvc.perform(delete("/consultas/1"))
+                .andReturn().getResponse();
 
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+
+    }
+    
+    @Test
+    @DisplayName("Deveria devolver codigo http 404 quando consulta nao existe - excluir consulta")
+    @WithMockUser
+    void excluir_cenario2() throws Exception {
+        var response = mvc.perform(delete("/consultas/1000000000"))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+
+    }
+    
 }
