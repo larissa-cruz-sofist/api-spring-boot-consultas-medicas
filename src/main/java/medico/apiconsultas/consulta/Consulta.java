@@ -35,5 +35,10 @@ public class Consulta {
     
     private Boolean ativo;
     
+	public void excluir() {
+		this.ativo = false;
+		
+	}
+    
     
 }
