@@ -42,7 +42,7 @@ public class ConsultaControllerTest {
     private AgendaDeConsultas agendaDeConsultas;
 	
   	@Test
-    @DisplayName("Deveria devolver codigo http 400 quando informacoes estao invalidas")
+    @DisplayName("Deveria devolver codigo http 400 quando informacoes da consulta estao invalidas")
     @WithMockUser
     void agendar_cenario1() throws Exception {
         var response = mvc.perform(post("/consultas"))
@@ -52,7 +52,7 @@ public class ConsultaControllerTest {
     }
   	
     @Test
-    @DisplayName("Deveria devolver codigo http 200 quando informacoes estao validas - cadastrar consulta")
+    @DisplayName("Deveria devolver codigo http 200 quando informacoes da consulta estao validas - cadastrar consulta")
     @WithMockUser
     void agendar_cenario2() throws Exception {
         var data = LocalDateTime.now().plusHours(1);
