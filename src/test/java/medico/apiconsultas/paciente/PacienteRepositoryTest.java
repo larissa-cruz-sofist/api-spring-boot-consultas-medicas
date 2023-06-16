@@ -2,6 +2,8 @@ package medico.apiconsultas.paciente;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,12 @@ class PacienteRepositoryTest {
 		
 		assertEquals(2, pacientesAtivos.getTotalElements());
 		
+		 List<Paciente> pacientesList = pacientesAtivos.getContent();
+		 
+		 assertEquals("Eliana", pacientesList.get(0).getNome());
+		 assertEquals("Eduardo", pacientesList.get(1).getNome());
+		 
+		 assertFalse(pacientesList.contains(pacienteInativo));
 		
 	}
 
