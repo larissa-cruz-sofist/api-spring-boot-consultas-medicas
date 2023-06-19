@@ -59,7 +59,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, telefone e endereco completo")
+	@DisplayName("Deve alterar o nome do paciente")
 	void testAtualizarInformacoesPaciente_cenario3() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "Bahia", "BA");
@@ -83,7 +83,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, nome e endereco completo")
+	@DisplayName("Deve alterar o telefone do paciente")
 	void testAtualizarInformacoesPaciente_cenario4() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "Bahia", "BA");
@@ -107,7 +107,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, nome e telefone")
+	@DisplayName("Deve alterar o endereco completo do paciente")
 	void testAtualizarInformacoesPaciente_cenario5() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "Bahia", "BA");
@@ -131,7 +131,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, exceto endereco logradouro")
+	@DisplayName("Deve alterar o logradouro do endereco do paciente")
 	void testAtualizarInformacoesPaciente_cenario6() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "Bahia", "BA");
@@ -155,7 +155,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, exceto endereco bairro")
+	@DisplayName("Deve alterar o bairro do endereco do paciente")
 	void testAtualizarInformacoesPaciente_cenario7() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "Bahia", "BA");
@@ -179,7 +179,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, exceto endereco cep")
+	@DisplayName("Deve alterar o cep do endereco do paciente")
 	void testAtualizarInformacoesPaciente_cenario8() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "Bahia", "BA");
@@ -203,7 +203,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, exceto endereco cidade")
+	@DisplayName("Deve alterar a cidade do endereco do paciente")
 	void testAtualizarInformacoesPaciente_cenario9() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "Bahia", "SP");
@@ -227,7 +227,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, exceto endereco uf")
+	@DisplayName("Deve alterar uf do endereco do paciente")
 	void testAtualizarInformacoesPaciente_cenario10() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "São Paulo", "SP");
@@ -251,7 +251,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, exceto endereco complemento")
+	@DisplayName("Deve alterar complemento do endereco do paciente")
 	void testAtualizarInformacoesPaciente_cenario11() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "São Paulo", "SP");
@@ -275,7 +275,7 @@ class PacienteTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do paciente, exceto endereco numero")
+	@DisplayName("Deve alterar numero do endereco do paciente")
 	void testAtualizarInformacoesPaciente_cenario12() {
 		
 		var endereco = new Endereco("rua augusta", "tatuape", "09658410", "2687", "bloco K", "São Paulo", "SP");

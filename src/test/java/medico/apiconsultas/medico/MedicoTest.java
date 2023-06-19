@@ -64,7 +64,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, telefone e endereco completo")
+	@DisplayName("Deve alterar nome do medico")
 	void testAtualizarInformacoesMedico_cenario3() {
 		
 		var especialidade = Especialidade.ORTOPEDIA;
@@ -90,7 +90,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, nome e endereco completo")
+	@DisplayName("Deve alterar telefone do medico")
 	void testAtualizarInformacoesMedico_cenario4() {
 		
 		var especialidade = Especialidade.ORTOPEDIA;
@@ -116,7 +116,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, nome e telefone")
+	@DisplayName("Deve alterar o endereco completo do medico")
 	void testAtualizarInformacoesMedico_cenario5() {
 		
 		var especialidade = Especialidade.GINECOLOGIA;
@@ -142,7 +142,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, exceto endereco logradouro")
+	@DisplayName("Deve alterar o logradouro do endereco do medico")
 	void testAtualizarInformacoesMedico_cenario6() {
 		
 		var especialidade = Especialidade.GINECOLOGIA;
@@ -168,7 +168,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, exceto endereco bairro")
+	@DisplayName("Deve alterar o bairro do endereco do medico")
 	void testAtualizarInformacoesMedico_cenario7() {
 		
 		var especialidade = Especialidade.DERMATOLOGIA;
@@ -194,7 +194,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, exceto endereco cep")
+	@DisplayName("Deve alterar o cep do endereco do medico")
 	void testAtualizarInformacoesMedico_cenario8() {
 		
 		var especialidade = Especialidade.DERMATOLOGIA;
@@ -220,7 +220,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, exceto endereco cidade")
+	@DisplayName("Deve alterar a cidade do endereco do medico")
 	void testAtualizarInformacoesMedico_cenario9() {
 		
 		var especialidade = Especialidade.ORTOPEDIA;
@@ -246,7 +246,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, exceto endereco uf")
+	@DisplayName("Deve alterar uf do endereco do medico")
 	void testAtualizarInformacoesMedico_cenario10() {
 		
 		var especialidade = Especialidade.ORTOPEDIA;
@@ -272,7 +272,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, exceto endereco complemento")
+	@DisplayName("Deve alterar complemento do endereco do medico")
 	void testAtualizarInformacoesMedico_cenario11() {
 		
 		var especialidade = Especialidade.ORTOPEDIA;
@@ -298,7 +298,7 @@ class MedicoTest {
 	}
 	
 	@Test
-	@DisplayName("Não deve alterar os dados do médico, exceto endereco numero")
+	@DisplayName("Deve alterar numero do endereco do medico")
 	void testAtualizarInformacoesMedico_cenario12() {
 		
 		var especialidade = Especialidade.ORTOPEDIA;
