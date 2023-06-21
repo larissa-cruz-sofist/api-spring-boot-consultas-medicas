@@ -21,7 +21,7 @@ jobs:
         cache: maven
         
     - name: Build with Maven
-      run: mvn -B test --file ./api-spring-boot-consultas-medicas/pom.xml
+      run: mvn -B test --file pom.xml
       
     - name: Mvn install
       run: mvn install
