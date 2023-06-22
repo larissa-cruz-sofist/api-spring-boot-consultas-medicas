@@ -25,7 +25,7 @@ jobs:
         docker run -d --name h2db -p 8080:8080 -e H2_OPTIONS='-ifNotExists' --rm oscarfonts/h2
 
     - name: Build and Test
-      run: ./mvnw clean test
+      run: mvn clean test
 
     - name: Stop H2 Database
       run: docker stop h2db
