@@ -26,7 +26,7 @@ jobs:
         DATABASE_PASSWORD: password
         DATABASE_URL: jdbc:h2:file:/data/demo
       run: |
-        docker run -d -p 8080:8080 -e H2_OPTIONS='-ifNotExists' -e H2_USER=$DATABASE_USER -e H2_PASSWORD=$DATABASE_PASSWORD -e H2_URL=$DATABASE_URL --rm oscarfonts/h2
+        docker run -d -p 8080:8080 -e H2_OPTIONS=’-ifNotExists’ -e H2_USER=$DATABASE_USER -e H2_PASSWORD=$DATABASE_PASSWORD -e H2_URL=$DATABASE_URL -v $(pwd)/data:/data –rm oscarfonts/h2
         
     - name: Build and Test
       run: mvn clean test
