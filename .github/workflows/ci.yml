@@ -10,7 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -20,14 +20,18 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Build with Maven
-      run: mvn -B test --file pom.xml
-      
-    - name: Mvn install
-      run: mvn install
-      
-    - name: Run tests
-      run: mvn test
+    - name: Set up Docker
+      uses: docker/setup-docker@v1
+
+    - name: Start H2 Database
+      run: |
+        docker run -d --name h2db -p 8080:8080 -e H2_OPTIONS='-ifNotExists' --rm oscarfonts/h2
+
+    - name: Build and Test
+      run: ./mvnw clean test
+
+    - name: Stop H2 Database
+      run: docker stop h2db
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
