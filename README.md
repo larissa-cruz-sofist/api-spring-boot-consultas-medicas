@@ -4,7 +4,7 @@ Projeto trabalhado no curso "Spring Boot 3: Desenvolva uma API Rest em Java" da 
 ## Passo a Passo
 1. Editar as variáveis de ambiente indicando o Java JDK 17
 2. Clonar o projeto em sua máquina
-3. Importar a pasta da projeto no Visual Studio Code
+3. Importar a pasta do projeto no Visual Studio Code
 4. Ter as seguintes extensões instaladas no VS Code:
      - _Debugger for Java (Microsoft);_
      - _Extension Pack for Java (Microsoft);_
