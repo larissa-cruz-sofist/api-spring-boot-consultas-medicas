@@ -11,6 +11,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -26,7 +29,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import medico.apiconsultas.controllers.PacienteController;
 import medico.apiconsultas.endereco.DadosEndereco;
+import medico.apiconsultas.endereco.Endereco;
 import medico.apiconsultas.paciente.*;
+
+import java.util.stream.Stream;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -77,22 +83,34 @@ class PacienteControllerTest {
 	     
 	}
 	
-    @Test
-	@Disabled("Teste ignorado para pipline")
+    @ParameterizedTest
     @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir paciente")
+	@MethodSource("argumentoAtivo")
     @WithMockUser
-    void excluirPacienteCenario1() throws Exception {
-        var response = mvc.perform(delete("/pacientes/325"))
-                .andReturn().getResponse();
+    void excluirPacienteCenario1(boolean ativo) throws Exception {
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+		var endereco = new Endereco("rua andreas", "sao jose", "19999977", "2288", "bloco A", "Bahia", "BA");
+
+		Paciente paciente = new Paciente(Long.valueOf(123), "Carlos", "carlos@voll.med", "965412298", "422.784.666-01", endereco, ativo);
+		when(repository.getReferenceById(any(Long.class))).thenReturn(paciente);
+
+		ResponseEntity<Void> response = controller.excluir(paciente.getId());
+
+        assertEquals(ResponseEntity.noContent().build(), response);
 
     }
+
+	   private static Stream<Arguments> argumentoAtivo() {
+        return Stream.of(
+                Arguments.of(true),
+                Arguments.of(false));
+
+}
     
     @Test
     @DisplayName("Deveria devolver codigo http 404 quando paciente nao existe - excluir paciente")
     @WithMockUser
-    void excluirMedicoCenario2() throws Exception {
+    void excluirPacienteCenario2() throws Exception {
         var response = mvc.perform(delete("/pacientes/1000000000"))
                 .andReturn().getResponse();
 
