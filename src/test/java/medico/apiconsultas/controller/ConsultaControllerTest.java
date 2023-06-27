@@ -53,22 +53,21 @@ public class ConsultaControllerTest {
 
         @MockBean
         private AgendaDeConsultas agendaDeConsultas;
-	
 
         @Test
         @DisplayName("Deveria devolver codigo http 400 quando informacoes da consulta estao invalidas")
         @WithMockUser
-        void agendarConsultaCenario1() throws Exception {
+        void agendarConsultaSemInformacoesBody() throws Exception {
                 var response = mvc.perform(post("/consultas"))
-                        .andReturn().getResponse();
+                                .andReturn().getResponse();
 
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         }
-                
+
         @Test
         @DisplayName("Deveria devolver codigo http 200 quando informacoes da consulta estao validas - cadastrar consulta")
         @WithMockUser
-        void agendarConsultaCenario2() throws Exception {
+        void agendarConsultaInformacoesValidas() throws Exception {
                 var data = LocalDateTime.now().plusHours(1);
                 var especialidade = Especialidade.CARDIOLOGIA;
 
@@ -76,28 +75,27 @@ public class ConsultaControllerTest {
                 when(agendaDeConsultas.agendar(any())).thenReturn(dadosDetalhamento);
 
                 var response = mvc
-                        .perform(
-                                post("/consultas")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(dadosAgendamentoConsultaJson.write(
-                                                new DadosAgendamentoConsulta(2l, 5l, data, especialidade)
-                                        ).getJson())
-                        )
-                        .andReturn().getResponse();
+                                .perform(
+                                                post("/consultas")
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(dadosAgendamentoConsultaJson.write(
+                                                                                new DadosAgendamentoConsulta(2l, 5l,
+                                                                                                data, especialidade))
+                                                                                .getJson()))
+                                .andReturn().getResponse();
 
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
                 var jsonEsperado = dadosDetalhamentoConsultaJson.write(
-                        dadosDetalhamento
-                ).getJson();
+                                dadosDetalhamento).getJson();
 
                 assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
         }
-        
+
         @Test
         @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir consulta")
         @WithMockUser
-        void excluirConsultaCenario1() throws Exception {
+        void excluirConsultaExistente() throws Exception {
 
                 Consulta consulta = Mockito.mock(Consulta.class);
                 when(repository.getReferenceById(any(Long.class))).thenReturn(consulta);
@@ -107,16 +105,16 @@ public class ConsultaControllerTest {
                 assertEquals(ResponseEntity.noContent().build(), response);
 
         }
-        
+
         @Test
         @DisplayName("Deveria devolver codigo http 404 quando consulta nao existe - excluir consulta")
         @WithMockUser
-        void excluirConsultaCenario2() throws Exception {
+        void excluirConsultaNaoExistente() throws Exception {
                 var response = mvc.perform(delete("/consultas/1000000000"))
-                        .andReturn().getResponse();
+                                .andReturn().getResponse();
 
                 assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
 
         }
-        
+
 }
