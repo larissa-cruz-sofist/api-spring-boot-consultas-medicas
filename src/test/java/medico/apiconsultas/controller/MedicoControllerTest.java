@@ -8,10 +8,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import java.time.DayOfWeek;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -25,11 +29,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import medico.apiconsultas.controllers.MedicoController;
 import medico.apiconsultas.endereco.DadosEndereco;
+import medico.apiconsultas.endereco.Endereco;
 import medico.apiconsultas.medico.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
+
+import java.util.stream.Stream;
 
 
 @SpringBootTest
@@ -49,7 +56,7 @@ class MedicoControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 400 quando informacoes do medico estao invalidas")
 	@WithMockUser
-	void cadastrarmedico_cenario1() throws Exception {
+	void cadastrarMedicoCenario1() throws Exception {
 		var response = mvc.perform(post("/medicos"))
 				.andReturn().getResponse();
 		
@@ -59,7 +66,7 @@ class MedicoControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 200 quando informacoes do medico estao validas - cadastrar medico")
 	@WithMockUser
-	void cadastrarmedico_cenario2() throws Exception {
+	void cadastrarMedicoCenario2() throws Exception {
 		
 		var especialidade = Especialidade.CARDIOLOGIA;
 		
@@ -83,22 +90,35 @@ class MedicoControllerTest {
 	     
 	}
 	
-    @Test
-	@Disabled("Teste ignorado para pipline")
+    @ParameterizedTest
     @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir medico")
+	@MethodSource("argumentoAtivo")
     @WithMockUser
-    void excluirmedico_cenario1() throws Exception {
-        var response = mvc.perform(delete("/medicos/368"))
-                .andReturn().getResponse();
+    void excluirMedicoCenario1(boolean ativo) throws Exception {
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+		var endereco = new Endereco("rua andreas", "sao jose", "19999977", "2288", "bloco A", "Bahia", "BA");
+		var especialidade = Especialidade.ORTOPEDIA;
+
+		Medico medico = new Medico(Long.valueOf(123), "Carlos", "carlos@voll.med", "965412298", "801118", especialidade, endereco, ativo);
+		when(repository.getReferenceById(any(Long.class))).thenReturn(medico);
+
+		ResponseEntity<Void> response = controller.excluir(medico.getId());
+
+        assertEquals(ResponseEntity.noContent().build(), response);
 
     }
+
+	   private static Stream<Arguments> argumentoAtivo() {
+        return Stream.of(
+                Arguments.of(true),
+                Arguments.of(false));
+
+}
     
     @Test
     @DisplayName("Deveria devolver codigo http 404 quando medico nao existe - excluir medico")
     @WithMockUser
-    void excluirmedico_cenario2() throws Exception {
+    void excluirMedicoCenario2() throws Exception {
         var response = mvc.perform(delete("/medicos/1000000000"))
                 .andReturn().getResponse();
 
@@ -109,7 +129,7 @@ class MedicoControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 200 quando informacoes do medico estao validas - alterar medico")
 	@WithMockUser
-	void alterarmedico_cenario1() throws Exception {
+	void alterarMedicoCenario1() throws Exception {
 		
 		Medico medicoSimulado = Mockito.mock(Medico.class);
 		when(repository.getReferenceById(any(Long.class))).thenReturn(medicoSimulado);

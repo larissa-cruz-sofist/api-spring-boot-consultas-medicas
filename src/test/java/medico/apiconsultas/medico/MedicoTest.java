@@ -22,7 +22,7 @@ class MedicoTest {
 
 	@Test
 	@DisplayName("Deve alterar os dados do médico, nome, telefone e endereco completo")
-	void testAtualizarInformacoesMedico_cenario1() {
+	void testAtualizarInformacoesMedicoCenario1() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -72,7 +72,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Não deve alterar os dados do médico, nome, telefone e endereco completo")
-	void testAtualizarInformacoesMedico_cenario2() {
+	void testAtualizarInformacoesMedicoCenario2() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -111,7 +111,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar nome do medico")
-	void testAtualizarInformacoesMedico_cenario3() {
+	void testAtualizarInformacoesMedicoCenario3() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -152,7 +152,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar telefone do medico")
-	void testAtualizarInformacoesMedico_cenario4() {
+	void testAtualizarInformacoesMedicoCenario4() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -193,7 +193,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar o endereco completo do medico")
-	void testAtualizarInformacoesMedico_cenario5() {
+	void testAtualizarInformacoesMedicoCenario5() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -240,7 +240,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar o logradouro do endereco do medico")
-	void testAtualizarInformacoesMedico_cenario6() {
+	void testAtualizarInformacoesMedicoCenario6() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -281,7 +281,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar o bairro do endereco do medico")
-	void testAtualizarInformacoesMedico_cenario7() {
+	void testAtualizarInformacoesMedicoCenario7() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -322,7 +322,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar o cep do endereco do medico")
-	void testAtualizarInformacoesMedico_cenario8() {
+	void testAtualizarInformacoesMedicoCenario8() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -363,7 +363,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar a cidade do endereco do medico")
-	void testAtualizarInformacoesMedico_cenario9() {
+	void testAtualizarInformacoesMedicoCenario9() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -404,7 +404,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar uf do endereco do medico")
-	void testAtualizarInformacoesMedico_cenario10() {
+	void testAtualizarInformacoesMedicoCenario10() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -445,7 +445,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar complemento do endereco do medico")
-	void testAtualizarInformacoesMedico_cenario11() {
+	void testAtualizarInformacoesMedicoCenario11() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();
@@ -486,7 +486,7 @@ class MedicoTest {
 	
 	@Test
 	@DisplayName("Deve alterar numero do endereco do medico")
-	void testAtualizarInformacoesMedico_cenario12() {
+	void testAtualizarInformacoesMedicoCenario12() {
 		
 		var logradouro1 = faker.address().streetName();
 		var bairro1 = faker.address().lastName();

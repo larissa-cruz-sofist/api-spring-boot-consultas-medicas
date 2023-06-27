@@ -109,7 +109,7 @@ class MedicoRepositoryTest {
     
 	@Test
 	@DisplayName("Deve retornar só os medicos ativos")
-	void testFindAllByAtivoTrue_medico() {
+	void testFindAllByAtivoTrueMedico() {
 		
 		var endereco1 = new Endereco("rua andreas", "sao jose", "19999977", "2288", "bloco A", "Bahia", "BA");
 		var endereco2 = new Endereco("rua canada", "sao pedro", "12388888", "2100", "bloco F", "Rio de Janeiro", "RJ");

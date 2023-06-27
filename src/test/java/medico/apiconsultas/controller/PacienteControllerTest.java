@@ -45,7 +45,7 @@ class PacienteControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 400 quando informacoes do paciente estao invalidas")
 	@WithMockUser
-	void cadastrarpaciente_cenario1() throws Exception {
+	void cadastrarPacienteCenario1() throws Exception {
 		var response = mvc.perform(post("/pacientes"))
 				.andReturn().getResponse();
 		
@@ -55,7 +55,7 @@ class PacienteControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 200 quando informacoes do paciente estao validas - cadastrar paciente")
 	@WithMockUser
-	void cadastrarpaciente_cenario2() throws Exception {
+	void cadastrarPacienteCenario2() throws Exception {
 		
 		DadosCadastroPaciente dadosCadastroPaciente = new DadosCadastroPaciente("Laura", "laura@vold.med", "999999999", "589.874-63", new DadosEndereco("rua visconde", "santa paula", "12366612", "Sao Paulo", "SP", "bloco E", "210"));
 		
@@ -81,7 +81,7 @@ class PacienteControllerTest {
 	@Disabled("Teste ignorado para pipline")
     @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir paciente")
     @WithMockUser
-    void excluirpaciente_cenario1() throws Exception {
+    void excluirPacienteCenario1() throws Exception {
         var response = mvc.perform(delete("/pacientes/325"))
                 .andReturn().getResponse();
 
@@ -92,7 +92,7 @@ class PacienteControllerTest {
     @Test
     @DisplayName("Deveria devolver codigo http 404 quando paciente nao existe - excluir paciente")
     @WithMockUser
-    void excluirmedico_cenario2() throws Exception {
+    void excluirMedicoCenario2() throws Exception {
         var response = mvc.perform(delete("/pacientes/1000000000"))
                 .andReturn().getResponse();
 
@@ -103,7 +103,7 @@ class PacienteControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 200 quando informacoes do paciente estao validas - alterar paciente")
 	@WithMockUser
-	void alterarpaciente_cenario1() throws Exception {
+	void alterarPacienteCenario1() throws Exception {
 		
 		Paciente pacienteSimulado = Mockito.mock(Paciente.class);
 		when(repository.getReferenceById(any(Long.class))).thenReturn(pacienteSimulado);

@@ -45,7 +45,7 @@ public class ConsultaControllerTest {
   	@Test
     @DisplayName("Deveria devolver codigo http 400 quando informacoes da consulta estao invalidas")
     @WithMockUser
-    void agendar_cenario1() throws Exception {
+    void agendarConsultaCenario1() throws Exception {
         var response = mvc.perform(post("/consultas"))
                 .andReturn().getResponse();
 
@@ -55,7 +55,7 @@ public class ConsultaControllerTest {
     @Test
     @DisplayName("Deveria devolver codigo http 200 quando informacoes da consulta estao validas - cadastrar consulta")
     @WithMockUser
-    void agendar_cenario2() throws Exception {
+    void agendarConsultaCenario2() throws Exception {
         var data = LocalDateTime.now().plusHours(1);
         var especialidade = Especialidade.CARDIOLOGIA;
 
@@ -85,7 +85,7 @@ public class ConsultaControllerTest {
     @Disabled("Teste ignorado para pipline")
     @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir consulta")
     @WithMockUser
-    void excluir_cenario1() throws Exception {
+    void excluirConsultaCenario1() throws Exception {
         var response = mvc.perform(delete("/consultas/1"))
                 .andReturn().getResponse();
 
@@ -96,7 +96,7 @@ public class ConsultaControllerTest {
     @Test
     @DisplayName("Deveria devolver codigo http 404 quando consulta nao existe - excluir consulta")
     @WithMockUser
-    void excluir_cenario2() throws Exception {
+    void excluirConsultaCenario2() throws Exception {
         var response = mvc.perform(delete("/consultas/1000000000"))
                 .andReturn().getResponse();
 
