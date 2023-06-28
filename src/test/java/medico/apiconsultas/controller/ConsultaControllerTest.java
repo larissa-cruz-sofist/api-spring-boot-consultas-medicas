@@ -1,107 +1,151 @@
 package medico.apiconsultas.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.stream.Stream;
 
 import medico.apiconsultas.consulta.*;
-import medico.apiconsultas.medico.Especialidade;
+import medico.apiconsultas.medico.*;
+import medico.apiconsultas.paciente.*;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cglib.core.Local;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import medico.apiconsultas.controllers.ConsultaController;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureJsonTesters
 public class ConsultaControllerTest {
 
-	@Autowired
-	private MockMvc mvc;
-	
-	@Autowired
-	private JacksonTester<DadosAgendamentoConsulta> dadosAgendamentoConsultaJson;
-	
-	@Autowired
-	private JacksonTester<DadosDetalhamentoConsulta> dadosDetalhamentoConsultaJson;
-	
-    @MockBean
-    private AgendaDeConsultas agendaDeConsultas;
-	
-  	@Test
-    @DisplayName("Deveria devolver codigo http 400 quando informacoes da consulta estao invalidas")
-    @WithMockUser
-    void agendar_cenario1() throws Exception {
-        var response = mvc.perform(post("/consultas"))
-                .andReturn().getResponse();
+        @Autowired
+        private MockMvc mvc;
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    }
-  	
-    @Test
-    @DisplayName("Deveria devolver codigo http 200 quando informacoes da consulta estao validas - cadastrar consulta")
-    @WithMockUser
-    void agendar_cenario2() throws Exception {
-        var data = LocalDateTime.now().plusHours(1);
-        var especialidade = Especialidade.CARDIOLOGIA;
+        @Autowired
+        private JacksonTester<DadosAgendamentoConsulta> dadosAgendamentoConsultaJson;
 
-        var dadosDetalhamento = new DadosDetalhamentoConsulta(null, 2l, 5l, data, true);
-        when(agendaDeConsultas.agendar(any())).thenReturn(dadosDetalhamento);
+        @Autowired
+        private JacksonTester<DadosDetalhamentoConsulta> dadosDetalhamentoConsultaJson;
 
-        var response = mvc
-                .perform(
-                        post("/consultas")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(dadosAgendamentoConsultaJson.write(
-                                        new DadosAgendamentoConsulta(2l, 5l, data, especialidade)
-                                ).getJson())
-                )
-                .andReturn().getResponse();
+        @InjectMocks
+        private ConsultaController controller;
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        @Mock
+        private ConsultaRepository consultaRepository;
 
-        var jsonEsperado = dadosDetalhamentoConsultaJson.write(
-                dadosDetalhamento
-        ).getJson();
+        @Mock
+        private MedicoRepository medicoRepository;
 
-        assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
-    }
-    
-    @Test
-    @Disabled("Teste ignorado para pipline")
-    @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir consulta")
-    @WithMockUser
-    void excluir_cenario1() throws Exception {
-        var response = mvc.perform(delete("/consultas/1"))
-                .andReturn().getResponse();
+        @Mock 
+        private PacienteRepository pacienteRepository;
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+        @MockBean
+        private AgendaDeConsultas agendaDeConsultas;
 
-    }
-    
-    @Test
-    @DisplayName("Deveria devolver codigo http 404 quando consulta nao existe - excluir consulta")
-    @WithMockUser
-    void excluir_cenario2() throws Exception {
-        var response = mvc.perform(delete("/consultas/1000000000"))
-                .andReturn().getResponse();
+        @Test
+        @DisplayName("Deveria devolver codigo http 400 quando informacoes da consulta estao invalidas")
+        @WithMockUser
+        void agendarConsultaSemInformacoesBody() throws Exception {
+                var response = mvc.perform(post("/consultas"))
+                                .andReturn().getResponse();
 
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        }
 
-    }
-    
+        @Test
+        @DisplayName("Deveria devolver codigo http 200 quando informacoes da consulta estao validas - cadastrar consulta")
+        @WithMockUser
+        void agendarConsultaInformacoesValidas() throws Exception {
+                var data = LocalDateTime.now().plusHours(1);
+                var especialidade = Especialidade.CARDIOLOGIA;
+
+                var dadosDetalhamento = new DadosDetalhamentoConsulta(null, 2l, 5l, data, true);
+                when(agendaDeConsultas.agendar(any())).thenReturn(dadosDetalhamento);
+
+                var response = mvc
+                                .perform(
+                                                post("/consultas")
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(dadosAgendamentoConsultaJson.write(
+                                                                                new DadosAgendamentoConsulta(2l, 5l,
+                                                                                                data, especialidade))
+                                                                                .getJson()))
+                                .andReturn().getResponse();
+
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+                var jsonEsperado = dadosDetalhamentoConsultaJson.write(
+                                dadosDetalhamento).getJson();
+
+                assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
+        }
+
+        @ParameterizedTest
+        @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir consulta")
+        @MethodSource("argumentoAtivo")
+        @WithMockUser
+        void excluirConsultaExistente(boolean ativo) throws Exception {
+
+                Medico medico = Mockito.mock(Medico.class);
+                when(medicoRepository.getReferenceById(any(Long.class))).thenReturn(medico);
+
+                Paciente paciente = Mockito.mock(Paciente.class);
+                when(pacienteRepository.getReferenceById(any(Long.class))).thenReturn(paciente);
+
+                LocalDateTime data = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10, 0);
+
+                Consulta consulta = new Consulta(Long.valueOf(123), medico, paciente, data, ativo);
+                when(consultaRepository.getReferenceById(any(Long.class))).thenReturn(consulta);
+
+                ResponseEntity<Void> response = controller.excluir(consulta.getId());
+
+                assertEquals(ResponseEntity.noContent().build(), response);
+
+        }
+
+        	private static Stream<Arguments> argumentoAtivo() {
+		return Stream.of(
+				Arguments.of(true),
+				Arguments.of(false));
+
+	}
+
+        @Test
+        @DisplayName("Deveria devolver codigo http 404 quando consulta nao existe - excluir consulta")
+        @WithMockUser
+        void excluirConsultaNaoExistente() throws Exception {
+                var response = mvc.perform(delete("/consultas/1000000000"))
+                                .andReturn().getResponse();
+
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+
+        }
+
 }

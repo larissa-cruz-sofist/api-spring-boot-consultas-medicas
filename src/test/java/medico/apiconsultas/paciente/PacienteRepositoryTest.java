@@ -21,7 +21,7 @@ class PacienteRepositoryTest {
 
 	@Test
 	@DisplayName("Deve retornar só os pacientes ativos")
-	void testFindAllByAtivoTrue_paciente() {
+	void testFindAllByAtivoTruePaciente() {
 		
 		var endereco1 = new Endereco("rua santos", "santa maria", "12322277", "22", "bloco B", "Rio de Janeiro", "RJ");
 		var endereco2 = new Endereco("rua cananeia", "santa paula", "12320147", "21", "bloco C", "Bahia", "BA");
