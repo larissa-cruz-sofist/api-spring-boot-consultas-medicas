@@ -21,3 +21,7 @@ Projeto trabalhado no curso "Spring Boot 3: Desenvolva uma API Rest em Java" da 
 ## Caminhos Úteis da API
 - Banco de dados H2: http://www.localhost:8080/h2-console
 - Swagger: http://www.localhost:8080/swagger-ui/index.html
+
+## Comandos Importantes
+- Para dar start na API pelo terminal: **mvn install** (dentro da pasta do projeto), após, **java -jar target/api-consultas-0.0.1-SNAPSHOT.jar**
+- Para rodar os testes: **mvn test**
