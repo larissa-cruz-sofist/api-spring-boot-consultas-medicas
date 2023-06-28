@@ -7,13 +7,21 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.stream.Stream;
 
 import medico.apiconsultas.consulta.*;
-import medico.apiconsultas.medico.Especialidade;
+import medico.apiconsultas.medico.*;
+import medico.apiconsultas.paciente.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cglib.core.Local;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
@@ -49,7 +58,13 @@ public class ConsultaControllerTest {
         private ConsultaController controller;
 
         @Mock
-        private ConsultaRepository repository;
+        private ConsultaRepository consultaRepository;
+
+        @Mock
+        private MedicoRepository medicoRepository;
+
+        @Mock 
+        private PacienteRepository pacienteRepository;
 
         @MockBean
         private AgendaDeConsultas agendaDeConsultas;
@@ -92,19 +107,35 @@ public class ConsultaControllerTest {
                 assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
         }
 
-        @Test
+        @ParameterizedTest
         @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir consulta")
+        @MethodSource("argumentoAtivo")
         @WithMockUser
-        void excluirConsultaExistente() throws Exception {
+        void excluirConsultaExistente(boolean ativo) throws Exception {
 
-                Consulta consulta = Mockito.mock(Consulta.class);
-                when(repository.getReferenceById(any(Long.class))).thenReturn(consulta);
+                Medico medico = Mockito.mock(Medico.class);
+                when(medicoRepository.getReferenceById(any(Long.class))).thenReturn(medico);
+
+                Paciente paciente = Mockito.mock(Paciente.class);
+                when(pacienteRepository.getReferenceById(any(Long.class))).thenReturn(paciente);
+
+                LocalDateTime data = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10, 0);
+
+                Consulta consulta = new Consulta(Long.valueOf(123), medico, paciente, data, ativo);
+                when(consultaRepository.getReferenceById(any(Long.class))).thenReturn(consulta);
 
                 ResponseEntity<Void> response = controller.excluir(consulta.getId());
 
                 assertEquals(ResponseEntity.noContent().build(), response);
 
         }
+
+        	private static Stream<Arguments> argumentoAtivo() {
+		return Stream.of(
+				Arguments.of(true),
+				Arguments.of(false));
+
+	}
 
         @Test
         @DisplayName("Deveria devolver codigo http 404 quando consulta nao existe - excluir consulta")
