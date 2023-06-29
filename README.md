@@ -20,7 +20,10 @@ Projeto trabalhado no curso "Spring Boot 3: Desenvolva uma API Rest em Java" da 
 5. Start na API pelo terminal: **mvn install** (dentro da pasta do projeto), após, **java -jar target/api-consultas-0.0.1-SNAPSHOT.jar**
 
 ## Project Structure
+- .github/workflows/ci.yml: Script do projeto para rodar na pipeline
 - src/main: Arquivos de estrutura do projeto
+- src/main/resources/db/migration: Arquivos de criação e alteração de tabelas e colunas do banco de dados
+- src/main/resources/application.properties: Arquivo de configuração do banco de dados
 - src/test: Mapeamento do cenário de teste
 
 ## Contributing
