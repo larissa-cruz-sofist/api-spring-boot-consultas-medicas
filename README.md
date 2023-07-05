@@ -30,3 +30,4 @@ Projeto trabalhado no curso "Spring Boot 3: Desenvolva uma API Rest em Java" da 
 - Banco de dados H2: http://www.localhost:8080/h2-console
 - Swagger: http://www.localhost:8080/swagger-ui/index.html
 - Dentro do arquivo **application.properties** o caminho do banco de dados é definido como: **_spring.datasource.url=jdbc:h2:file:./data/demo_** para que rode na pipeline, contudo, para rodar localmente é necessário alterá-lo para: **_spring.datasource.url=jdbc:h2:file:/data/demo_**
+- Para gerar o relatório de cobertura de código são necessários dois comandos: **mvn clean**, após, **jacoco:prepare-agent test install jacoco:report**
