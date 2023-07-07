@@ -31,7 +31,7 @@ public class ValidadorMedicoComOutraConsultaNoMesmoHorarioTest {
 
     @Test
     @DisplayName("Teste agendar consulta medico não possui outra consulta no mesmo horario")
-    public void testValidarMedicoNaoPossuiOutraConsultaMesmoHorario() {
+    public void testValidarConsultaMedicoNaoPossuiOutraConsultaMesmoHorario() {
 
         var especialidade = Especialidade.DERMATOLOGIA;
 
@@ -47,7 +47,7 @@ public class ValidadorMedicoComOutraConsultaNoMesmoHorarioTest {
 
     @Test
     @DisplayName("Teste agendar consulta medico possui outra consulta no mesmo horario")
-    public void testValidarMedicoPossuiOutraConsultaMesmoHorario() {
+    public void testValidarConsultaMedicoPossuiOutraConsultaMesmoHorario() {
 
         var especialidade = Especialidade.DERMATOLOGIA;
 

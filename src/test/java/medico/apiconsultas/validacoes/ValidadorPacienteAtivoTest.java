@@ -32,7 +32,7 @@ public class ValidadorPacienteAtivoTest {
 
     @Test
     @DisplayName("Teste agendar consulta com paciente ativo")
-    public void testValidarConsultaPacienteAtivo() {
+    public void testValidarConsultaConsultaPacienteAtivo() {
 
         var especialidade = Especialidade.CARDIOLOGIA;
 

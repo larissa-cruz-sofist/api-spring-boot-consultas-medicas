@@ -32,7 +32,7 @@ public class ValidadorMedicoAtivoTest {
 
     @Test
     @DisplayName("Teste agendar consulta com medico ativo")
-    public void testValidarConsultaMedicoAtivo() {
+    public void testValidarConsultaConsultaMedicoAtivo() {
 
         var especialidade = Especialidade.CARDIOLOGIA;
 
@@ -48,7 +48,7 @@ public class ValidadorMedicoAtivoTest {
 
     @Test
     @DisplayName("Teste agendar consulta com medico inativo")
-    public void testValidarConsultaMedicoInativo() {
+    public void testValidarConsultaConsultaMedicoInativo() {
 
         var especialidade = Especialidade.CARDIOLOGIA;
 

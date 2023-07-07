@@ -14,7 +14,7 @@ public class ValidadorHorarioAntecedenciaTest {
 
     @Test
     @DisplayName("Teste agendar consulta com antecedencia suficiente = +30min")
-    public void testValidarComAntecedenciaSuficiente() {
+    public void testValidarConsultaComAntecedenciaSuficiente() {
 
         ValidadorHorarioAntecedencia validador = new ValidadorHorarioAntecedencia();
 
@@ -28,7 +28,7 @@ public class ValidadorHorarioAntecedenciaTest {
 
     @Test 
     @DisplayName("Teste agendar consulta sem antecedencia suficiente = -30min")
-    public void testValidarSemAntecedenciaSuficiente() {
+    public void testValidarConsultaSemAntecedenciaSuficiente() {
 
         ValidadorHorarioAntecedencia validador = new ValidadorHorarioAntecedencia();
 

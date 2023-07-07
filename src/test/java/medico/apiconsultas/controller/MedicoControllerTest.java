@@ -52,7 +52,7 @@ class MedicoControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 400 quando informacoes do medico estao invalidas")
 	@WithMockUser
-	void cadastrarMedicoSemInformacoesBody() throws Exception {
+	void deveriaRetornarStatus400QuandoCadastrarMedicoSemInformacoesBody() throws Exception {
 		var response = mvc.perform(post("/medicos"))
 				.andReturn().getResponse();
 
@@ -62,7 +62,7 @@ class MedicoControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 200 quando informacoes do medico estao validas - cadastrar medico")
 	@WithMockUser
-	void cadastrarMedicoInformacoesValidas() throws Exception {
+	void deveriaRetornarStatus200QuandoCadastrarMedicoInformacoesValidas() throws Exception {
 
 		var especialidade = Especialidade.CARDIOLOGIA;
 
@@ -91,7 +91,7 @@ class MedicoControllerTest {
 	@DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir medico")
 	@MethodSource("argumentoAtivo")
 	@WithMockUser
-	void excluirMedicoExistente(boolean ativo) throws Exception {
+	void deveriaRetornarStatus204QuandoExcluirMedicoExistente(boolean ativo) throws Exception {
 
 		var endereco = new Endereco("rua andreas", "sao jose", "19999977", "2288", "bloco A", "Bahia", "BA");
 		var especialidade = Especialidade.ORTOPEDIA;
@@ -116,7 +116,7 @@ class MedicoControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 404 quando medico nao existe - excluir medico")
 	@WithMockUser
-	void excluirMedicoNaoExistente() throws Exception {
+	void deveriaRetornarStatus404QuandoExcluirMedicoNaoExistente() throws Exception {
 		var response = mvc.perform(delete("/medicos/1000000000"))
 				.andReturn().getResponse();
 
@@ -127,7 +127,7 @@ class MedicoControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 200 quando informacoes do medico estao validas - alterar medico")
 	@WithMockUser
-	void alterarMedicoExistente() throws Exception {
+	void deveriaRetornarStatus200QuandoAlterarMedicoExistente() throws Exception {
 
 		Medico medicoSimulado = Mockito.mock(Medico.class);
 		when(repository.getReferenceById(any(Long.class))).thenReturn(medicoSimulado);

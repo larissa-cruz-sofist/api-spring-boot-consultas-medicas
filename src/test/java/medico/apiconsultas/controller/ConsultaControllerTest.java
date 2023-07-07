@@ -1,8 +1,11 @@
 package medico.apiconsultas.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -71,7 +74,7 @@ public class ConsultaControllerTest {
         @Test
         @DisplayName("Deveria devolver codigo http 400 quando informacoes da consulta estao invalidas")
         @WithMockUser
-        void agendarConsultaSemInformacoesBody() throws Exception {
+        void deveriaRetornarStatus400QuandoAgendarConsultaSemInformacoesBody() throws Exception {
                 var response = mvc.perform(post("/consultas"))
                                 .andReturn().getResponse();
 
@@ -81,7 +84,7 @@ public class ConsultaControllerTest {
         @Test
         @DisplayName("Deveria devolver codigo http 200 quando informacoes da consulta estao validas - cadastrar consulta")
         @WithMockUser
-        void agendarConsultaInformacoesValidas() throws Exception {
+        void deveriaRetornarStatus200QuandoAgendarConsultaComInformacoesValidas() throws Exception {
                 var data = LocalDateTime.now().plusHours(1);
                 var especialidade = Especialidade.CARDIOLOGIA;
 
@@ -110,13 +113,11 @@ public class ConsultaControllerTest {
         @DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir consulta")
         @MethodSource("argumentoAtivo")
         @WithMockUser
-        void excluirConsultaExistente(boolean ativo) throws Exception {
+        void deveriaRetornarStatus204QuandoExcluirConsultaComInformacoesValidas(boolean ativo) throws Exception {
 
                 Medico medico = Mockito.mock(Medico.class);
-                when(medicoRepository.getReferenceById(any(Long.class))).thenReturn(medico);
 
                 Paciente paciente = Mockito.mock(Paciente.class);
-                when(pacienteRepository.getReferenceById(any(Long.class))).thenReturn(paciente);
 
                 LocalDateTime data = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY)).atTime(10, 0);
 
@@ -125,7 +126,10 @@ public class ConsultaControllerTest {
 
                 ResponseEntity<Void> response = controller.excluir(consulta.getId());
 
-                assertEquals(ResponseEntity.noContent().build(), response);
+                assertThat(response.getStatusCode(), equalTo(HttpStatus.NO_CONTENT));
+                assertThat(response.getBody()).isNull();
+
+                verify(consultaRepository).getReferenceById(any(Long.class));
 
         }
 
@@ -139,7 +143,7 @@ public class ConsultaControllerTest {
         @Test
         @DisplayName("Deveria devolver codigo http 404 quando consulta nao existe - excluir consulta")
         @WithMockUser
-        void excluirConsultaNaoExistente() throws Exception {
+        void deveriaRetornarStatus404QuandoExcluirConsultaNaoExistente() throws Exception {
                 var response = mvc.perform(delete("/consultas/1000000000"))
                                 .andReturn().getResponse();
 
