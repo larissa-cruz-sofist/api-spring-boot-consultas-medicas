@@ -1,7 +1,8 @@
 package medico.apiconsultas.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -78,7 +79,7 @@ class MedicoControllerTest {
 
 		verify(repository).save(any(Medico.class));
 
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
 
 		assertThat(response.getBody())
 				.usingRecursiveComparison()
@@ -102,7 +103,8 @@ class MedicoControllerTest {
 
 		ResponseEntity<Void> response = controller.excluir(medico.getId());
 
-		assertEquals(ResponseEntity.noContent().build(), response);
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.NO_CONTENT));
+		assertThat(response.getBody()).isNull();
 
 	}
 
@@ -141,7 +143,7 @@ class MedicoControllerTest {
 
 		verify(medicoSimulado).atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(HttpStatus.OK, responseAtualizar.getStatusCode());
+		assertThat(responseAtualizar.getStatusCode(), equalTo(HttpStatus.OK));
 
 	}
 
