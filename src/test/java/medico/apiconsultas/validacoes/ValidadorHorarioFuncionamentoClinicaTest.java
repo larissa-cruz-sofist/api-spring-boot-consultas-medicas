@@ -21,7 +21,7 @@ public class ValidadorHorarioFuncionamentoClinicaTest {
     @ParameterizedTest
     @MethodSource("horariosDatasValidasConsultas")
     @DisplayName("Teste agendar consulta em dia/horario validos de funcionamento da clinica")
-    public void testValidarHorarioFuncionamentoClinica(int hora, int minuto, DayOfWeek dia, Especialidade especialidade) {
+    public void testValidarConsultaHorarioFuncionamentoClinica(int hora, int minuto, DayOfWeek dia, Especialidade especialidade) {
 
         ValidadorHorarioFuncionamentoClinica validador = new ValidadorHorarioFuncionamentoClinica();
 
@@ -45,7 +45,7 @@ public class ValidadorHorarioFuncionamentoClinicaTest {
     @ParameterizedTest
     @MethodSource("horariosDatasInvalidasConsultas")
     @DisplayName("Teste agendar consulta em dia/horario invalidos de funcionamento da clinica")
-    public void testValidarHorarioInvalidoFuncionamentoClinica(int hora, int minuto, DayOfWeek dia, Especialidade especialidade) {
+    public void testValidarConsultaHorarioInvalidoFuncionamentoClinica(int hora, int minuto, DayOfWeek dia, Especialidade especialidade) {
 
         ValidadorHorarioFuncionamentoClinica validador = new ValidadorHorarioFuncionamentoClinica();
 

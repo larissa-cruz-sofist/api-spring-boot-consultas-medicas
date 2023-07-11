@@ -32,7 +32,7 @@ public class ValidadorPacienteSemOutraConsultaNoDiaTest {
 
     @Test
     @DisplayName("Teste agendar consulta paciente não possui consulta no mesmo dia")
-    public void testAgendarConsultaPacientaNaoPossuiConsultaNoMesmoDia() {
+    public void testValidarConsultaPacientaNaoPossuiConsultaNoMesmoDia() {
 
         var especialidade = Especialidade.DERMATOLOGIA;
 
@@ -48,7 +48,7 @@ public class ValidadorPacienteSemOutraConsultaNoDiaTest {
 
     @Test
     @DisplayName("Teste agendar consulta paciente possui consulta no mesmo dia")
-    public void testAgendarConsultaPacientaPossuiConsultaNoMesmoDia() {
+    public void testValidarConsultaPacientaPossuiConsultaNoMesmoDia() {
 
         var especialidade = Especialidade.DERMATOLOGIA;
 

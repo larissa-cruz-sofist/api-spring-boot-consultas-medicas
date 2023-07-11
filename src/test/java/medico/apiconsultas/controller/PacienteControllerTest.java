@@ -1,7 +1,8 @@
 package medico.apiconsultas.controller;
 
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,7 +51,7 @@ class PacienteControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 400 quando informacoes do paciente estao invalidas")
 	@WithMockUser
-	void cadastrarPacienteSemInformacoesBody() throws Exception {
+	void deveriaRetornarStatus400QuandoCadastrarPacienteSemInformacoesBody() throws Exception {
 		var response = mvc.perform(post("/pacientes"))
 				.andReturn().getResponse();
 
@@ -60,7 +61,7 @@ class PacienteControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 200 quando informacoes do paciente estao validas - cadastrar paciente")
 	@WithMockUser
-	void cadastrarPacienteInformacoesValidas() throws Exception {
+	void deveriaRetornarStatus200QuandoCadastrarPacienteInformacoesValidas() throws Exception {
 
 		DadosCadastroPaciente dadosCadastroPaciente = new DadosCadastroPaciente("Laura", "laura@vold.med", "999999999",
 				"589.874-63",
@@ -74,7 +75,7 @@ class PacienteControllerTest {
 
 		verify(repository).save(any(Paciente.class));
 
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
 
 		assertThat(response.getBody())
 				.usingRecursiveComparison()
@@ -87,7 +88,7 @@ class PacienteControllerTest {
 	@DisplayName("Deveria devolver codigo http 204 quando informacoes estao validas - excluir paciente")
 	@MethodSource("argumentoAtivo")
 	@WithMockUser
-	void excluirPacienteExistente(boolean ativo) throws Exception {
+	void deveriaRetornarStatus204QuandoExcluirPacienteExistente(boolean ativo) throws Exception {
 
 		var endereco = new Endereco("rua andreas", "sao jose", "19999977", "2288", "bloco A", "Bahia", "BA");
 
@@ -97,7 +98,8 @@ class PacienteControllerTest {
 
 		ResponseEntity<Void> response = controller.excluir(paciente.getId());
 
-		assertEquals(ResponseEntity.noContent().build(), response);
+		assertThat(response.getStatusCode(), equalTo(HttpStatus.NO_CONTENT));
+		assertThat(response.getBody()).isNull();
 
 	}
 
@@ -111,7 +113,7 @@ class PacienteControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 404 quando paciente nao existe - excluir paciente")
 	@WithMockUser
-	void excluirPacienteNaoExistente() throws Exception {
+	void deveriaRetornarStatus404QuandoExcluirPacienteNaoExistente() throws Exception {
 		var response = mvc.perform(delete("/pacientes/1000000000"))
 				.andReturn().getResponse();
 
@@ -122,7 +124,7 @@ class PacienteControllerTest {
 	@Test
 	@DisplayName("Deveria devolver codigo http 200 quando informacoes do paciente estao validas - alterar paciente")
 	@WithMockUser
-	void alterarPacienteExistente() throws Exception {
+	void deveriaRetornarStatus200QuandoAlterarPacienteExistente() throws Exception {
 
 		Paciente pacienteSimulado = Mockito.mock(Paciente.class);
 		when(repository.getReferenceById(any(Long.class))).thenReturn(pacienteSimulado);
@@ -136,7 +138,7 @@ class PacienteControllerTest {
 
 		verify(pacienteSimulado).atualizarInformacoes(dadosAtualizacaoPaciente);
 
-		assertEquals(HttpStatus.OK, responseAtualizar.getStatusCode());
+		assertThat(responseAtualizar.getStatusCode(), equalTo(HttpStatus.OK));
 
 	}
 
