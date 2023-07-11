@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 
 import medico.apiconsultas.endereco.DadosEndereco;
 import medico.apiconsultas.endereco.Endereco;
+import medico.apiconsultas.paciente.DadosAtualizacaoPaciente;
+
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;
@@ -19,508 +21,355 @@ class MedicoTest {
 	FakeValuesService fakeValuesService = new FakeValuesService(new Locale("pt-BR"), new RandomService());
 	Faker faker = new Faker(new Locale("pt-BR"));
 
+	private Medico montarMedicoRandomico() {
+		Endereco endereco = new Endereco(faker.address().streetName(), faker.address().lastName(),
+				fakeValuesService.numerify("########"), faker.address().buildingNumber(),
+				faker.address().secondaryAddress(), faker.address().city(), faker.address().stateAbbr());
+		var especialidade = Especialidade.CARDIOLOGIA;
+		return new Medico(null, faker.name().fullName(), fakeValuesService.bothify("???????##@vold.med"),
+				faker.phoneNumber().cellPhone(), fakeValuesService.numerify("######"), especialidade, endereco, true);
+	}
+
+	private Medico montarMedico() {
+		Endereco endereco = new Endereco("Rua Exemplo", "Bairro Exemplo", "12345678", "123", "Complemento Exemplo",
+				"Cidade Exemplo", "UF");
+		var especialidade = Especialidade.DERMATOLOGIA;
+		return new Medico(null, "Nome Inicial", "email@example.com", "123456789", "850147", especialidade, endereco,
+				true);
+	}
+
 	@Test
 	@DisplayName("Deve alterar os dados do médico, nome, telefone e endereco completo")
-	void testAtualizarInformacoesMedico() {
+	void deveriaAtualizarInformacoesMedico() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
+		// Dados para atualização
+		Medico atualizacaoMedico = montarMedicoRandomico();
 
-		var logradouro2 = faker.address().streetName();
-		var bairro2 = faker.address().lastName();
-		var cep2 = fakeValuesService.numerify("########");
-		var cidade2 = faker.address().city();
-		var uf2 = faker.address().stateAbbr();
-		var numero2 = faker.address().buildingNumber();
-		var complemento2 = faker.address().secondaryAddress();
+		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, atualizacaoMedico.getNome(),
+				atualizacaoMedico.getTelefone(),
+				new DadosEndereco(atualizacaoMedico.getEndereco().getLogradouro(),
+						atualizacaoMedico.getEndereco().getBairro(), atualizacaoMedico.getEndereco().getCep(),
+						atualizacaoMedico.getEndereco().getCidade(), atualizacaoMedico.getEndereco().getUf(),
+						atualizacaoMedico.getEndereco().getComplemento(), atualizacaoMedico.getEndereco().getNumero()));
 
-		var nome2 = faker.name().fullName();
-		var telefone2 = faker.phoneNumber().cellPhone();
-
-		var especialidade = Especialidade.CARDIOLOGIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, crm1, telefone1, especialidade, endereco, true);
-
-		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, nome2, telefone2,
-				new DadosEndereco(logradouro2, bairro2, cep2, cidade2, uf2, complemento2, numero2));
-
+		// Atualiza as informações do Medico
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome2, medico.getNome());
-		assertEquals(telefone2, medico.getTelefone());
-		assertEquals(logradouro2, medico.getEndereco().getLogradouro());
-		assertEquals(bairro2, medico.getEndereco().getBairro());
-		assertEquals(cep2, medico.getEndereco().getCep());
-		assertEquals(cidade2, medico.getEndereco().getCidade());
-		assertEquals(uf2, medico.getEndereco().getUf());
-		assertEquals(complemento2, medico.getEndereco().getComplemento());
-		assertEquals(numero2, medico.getEndereco().getNumero());
+		assertEquals(medico.getNome(), atualizacaoMedico.getNome());
+		assertEquals(medico.getTelefone(), atualizacaoMedico.getTelefone());
+		assertEquals(medico.getEndereco().getLogradouro(), atualizacaoMedico.getEndereco().getLogradouro());
+		assertEquals(medico.getEndereco().getBairro(), atualizacaoMedico.getEndereco().getBairro());
+		assertEquals(medico.getEndereco().getCep(), atualizacaoMedico.getEndereco().getCep());
+		assertEquals(medico.getEndereco().getCidade(), atualizacaoMedico.getEndereco().getCidade());
+		assertEquals(medico.getEndereco().getUf(), atualizacaoMedico.getEndereco().getUf());
+		assertEquals(medico.getEndereco().getComplemento(), atualizacaoMedico.getEndereco().getComplemento());
+		assertEquals(medico.getEndereco().getNumero(), atualizacaoMedico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Não deve alterar os dados do médico, nome, telefone e endereco completo")
-	void testNaoAtualizarInformacoesMedico() {
+	void deveriaNaoAtualizarInformacoesMedico() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var especialidade = Especialidade.DERMATOLOGIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		// Medico atualizacaoMedico = montarMedicoRandomico();
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
 				new DadosEndereco(null, null, null, null, null, null, null));
 
+		// Atualiza as informações do Medico
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar nome do medico")
-	void testAtualizarInformacoesMedicoNome() {
+	void deveriaAtualizarInformacoesMedicoNome() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
+		// Dados para atualização
+		var nomeNovo = faker.name().fullName();
 
-		var nome2 = faker.name().fullName();
-
-		var especialidade = Especialidade.ORTOPEDIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
-
-		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, nome2, null,
+		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, nomeNovo, null,
 				new DadosEndereco(null, null, null, null, null, null, null));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome2, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals(nomeNovo, medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar telefone do medico")
-	void testAtualizarInformacoesMedicoTelefone() {
+	void deveriaAtualizarInformacoesMedicoTelefone() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
+		// Dados para atualização
+		var telefoneNovo = faker.phoneNumber().cellPhone();
 
-		var telefone2 = faker.phoneNumber().cellPhone();
-
-		var especialidade = Especialidade.ORTOPEDIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
-
-		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, telefone2,
+		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, telefoneNovo,
 				new DadosEndereco(null, null, null, null, null, null, null));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone2, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals(telefoneNovo, medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar o endereco completo do medico")
-	void testAtualizarInformacoesMedicoEnderecoCompleto() {
+	void deveriaAtualizarInformacoesMedicoEnderecoCompleto() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var logradouro2 = faker.address().streetName();
-		var bairro2 = faker.address().lastName();
-		var cep2 = fakeValuesService.numerify("########");
-		var cidade2 = faker.address().city();
-		var uf2 = faker.address().stateAbbr();
-		var numero2 = faker.address().buildingNumber();
-		var complemento2 = faker.address().secondaryAddress();
-
-		var especialidade = Especialidade.GINECOLOGIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		var logradouroNovo = faker.address().streetName();
+		var bairroNovo = faker.address().lastName();
+		var cepNovo = fakeValuesService.numerify("########");
+		var cidadeNovo = faker.address().city();
+		var ufNovo = faker.address().stateAbbr();
+		var numeroNovo = faker.address().buildingNumber();
+		var complementoNovo = faker.address().secondaryAddress();
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
-				new DadosEndereco(logradouro2, bairro2, cep2, cidade2, uf2, complemento2, numero2));
+				new DadosEndereco(logradouroNovo, bairroNovo, cepNovo, cidadeNovo, ufNovo, complementoNovo,
+						numeroNovo));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro2, medico.getEndereco().getLogradouro());
-		assertEquals(bairro2, medico.getEndereco().getBairro());
-		assertEquals(cep2, medico.getEndereco().getCep());
-		assertEquals(cidade2, medico.getEndereco().getCidade());
-		assertEquals(uf2, medico.getEndereco().getUf());
-		assertEquals(complemento2, medico.getEndereco().getComplemento());
-		assertEquals(numero2, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals(logradouroNovo, medico.getEndereco().getLogradouro());
+		assertEquals(bairroNovo, medico.getEndereco().getBairro());
+		assertEquals(cepNovo, medico.getEndereco().getCep());
+		assertEquals(cidadeNovo, medico.getEndereco().getCidade());
+		assertEquals(ufNovo, medico.getEndereco().getUf());
+		assertEquals(complementoNovo, medico.getEndereco().getComplemento());
+		assertEquals(numeroNovo, medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar o logradouro do endereco do medico")
-	void testAtualizarInformacoesMedicoLogradouro() {
+	void deveriaAtualizarInformacoesMedicoLogradouro() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var logradouro2 = faker.address().streetName();
-
-		var especialidade = Especialidade.GINECOLOGIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		var logradouroNovo = faker.address().streetName();
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
-				new DadosEndereco(logradouro2, null, null, null, null, null, null));
+				new DadosEndereco(logradouroNovo, null, null, null, null, null, null));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro2, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals(logradouroNovo, medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar o bairro do endereco do medico")
-	void testAtualizarInformacoesMedicoBairro() {
+	void deveriaAtualizarInformacoesMedicoBairro() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var bairro2 = faker.address().lastName();
-
-		var especialidade = Especialidade.DERMATOLOGIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		var bairroNovo = faker.address().lastName();
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
-				new DadosEndereco(null, bairro2, null, null, null, null, null));
+				new DadosEndereco(null, bairroNovo, null, null, null, null, null));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro2, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals(bairroNovo, medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar o cep do endereco do medico")
-	void testAtualizarInformacoesMedicoCep() {
+	void deveriaAtualizarInformacoesMedicoCep() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var cep2 = fakeValuesService.numerify("########");
-
-		var especialidade = Especialidade.DERMATOLOGIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		var cepNovo = fakeValuesService.numerify("########");
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
-				new DadosEndereco(null, null, cep2, null, null, null, null));
+				new DadosEndereco(null, null, cepNovo, null, null, null, null));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep2, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals(cepNovo, medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar a cidade do endereco do medico")
-	void testAtualizarInformacoesMedicoCidade() {
+	void deveriaAtualizarInformacoesMedicoCidade() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var cidade2 = faker.address().city();
-
-		var especialidade = Especialidade.ORTOPEDIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		var cidadeNovo = faker.address().city();
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
-				new DadosEndereco(null, null, null, cidade2, null, null, null));
+				new DadosEndereco(null, null, null, cidadeNovo, null, null, null));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade2, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals(cidadeNovo, medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar uf do endereco do medico")
-	void testAtualizarInformacoesMedicoUf() {
+	void deveriaAtualizarInformacoesMedicoUf() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var uf2 = faker.address().stateAbbr();
-
-		var especialidade = Especialidade.ORTOPEDIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		var ufNovo = faker.address().stateAbbr();
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
-				new DadosEndereco(null, null, null, null, uf2, null, null));
+				new DadosEndereco(null, null, null, null, ufNovo, null, null));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf2, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals(ufNovo, medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar complemento do endereco do medico")
-	void testAtualizarInformacoesMedicoComplemento() {
+	void deveriaAtualizarInformacoesMedicoComplemento() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var complemento2 = faker.address().secondaryAddress();
-
-		var especialidade = Especialidade.ORTOPEDIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		var complementoNovo = faker.address().secondaryAddress();
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
-				new DadosEndereco(null, null, null, null, null, complemento2, null));
+				new DadosEndereco(null, null, null, null, null, complementoNovo, null));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento2, medico.getEndereco().getComplemento());
-		assertEquals(numero1, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals(complementoNovo, medico.getEndereco().getComplemento());
+		assertEquals("123", medico.getEndereco().getNumero());
 
 	}
 
 	@Test
 	@DisplayName("Deve alterar numero do endereco do medico")
-	void testAtualizarInformacoesMedicoNumero() {
+	void deveriaAtualizarInformacoesMedicoNumero() {
 
-		var logradouro1 = faker.address().streetName();
-		var bairro1 = faker.address().lastName();
-		var cep1 = fakeValuesService.numerify("########");
-		var cidade1 = faker.address().city();
-		var uf1 = faker.address().stateAbbr();
-		var numero1 = faker.address().buildingNumber();
-		var complemento1 = faker.address().secondaryAddress();
+		Medico medico = montarMedico();
 
-		var nome1 = faker.name().fullName();
-		var email1 = fakeValuesService.bothify("???????##@vold.med");
-		var crm1 = fakeValuesService.numerify("######");
-		var telefone1 = faker.phoneNumber().cellPhone();
-
-		var numero2 = faker.address().buildingNumber();
-
-		var especialidade = Especialidade.ORTOPEDIA;
-		var endereco = new Endereco(logradouro1, bairro1, cep1, numero1, complemento1, cidade1, uf1);
-
-		Medico medico = new Medico(null, nome1, email1, telefone1, crm1, especialidade, endereco, true);
+		// Dados para atualização
+		var numeroNovo = faker.address().buildingNumber();
 
 		DadosAtualizacaoMedico dadosAtualizacaoMedico = new DadosAtualizacaoMedico(null, null, null,
-				new DadosEndereco(null, null, null, null, null, null, numero2));
+				new DadosEndereco(null, null, null, null, null, null, numeroNovo));
 
+		// Atualiza as informações do paciente
 		medico.atualizarInformacoes(dadosAtualizacaoMedico);
 
-		assertEquals(nome1, medico.getNome());
-		assertEquals(telefone1, medico.getTelefone());
-		assertEquals(logradouro1, medico.getEndereco().getLogradouro());
-		assertEquals(bairro1, medico.getEndereco().getBairro());
-		assertEquals(cep1, medico.getEndereco().getCep());
-		assertEquals(cidade1, medico.getEndereco().getCidade());
-		assertEquals(uf1, medico.getEndereco().getUf());
-		assertEquals(complemento1, medico.getEndereco().getComplemento());
-		assertEquals(numero2, medico.getEndereco().getNumero());
+		assertEquals("Nome Inicial", medico.getNome());
+		assertEquals("123456789", medico.getTelefone());
+		assertEquals("Rua Exemplo", medico.getEndereco().getLogradouro());
+		assertEquals("Bairro Exemplo", medico.getEndereco().getBairro());
+		assertEquals("12345678", medico.getEndereco().getCep());
+		assertEquals("Cidade Exemplo", medico.getEndereco().getCidade());
+		assertEquals("UF", medico.getEndereco().getUf());
+		assertEquals("Complemento Exemplo", medico.getEndereco().getComplemento());
+		assertEquals(numeroNovo, medico.getEndereco().getNumero());
 
 	}
 
