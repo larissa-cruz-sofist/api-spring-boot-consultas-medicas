@@ -17,7 +17,7 @@ Projeto trabalhado no curso "Spring Boot 3: Desenvolva uma API Rest em Java" da 
      - _Spring Boot Extension Pack (VMware);_
      - _Spring Boot Tools (VMware);_
      - _Spring Initializr Java Support (Microsoft);_
-5. Start na API pelo terminal: **mvn install** (dentro da pasta do projeto), após, **java -jar target/api-consultas-0.0.1-SNAPSHOT.jar**
+5. Start na API pelo terminal: **mvn package spring-boot:repackage** (dentro da pasta do projeto), após, **java -jar target/api-consultas-0.0.1-SNAPSHOT.jar**
 
 ## Project Structure
 - .github/workflows/ci.yml: Script do projeto para rodar na pipeline
