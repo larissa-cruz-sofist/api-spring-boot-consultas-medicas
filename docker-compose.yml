@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  api:
+    container_name: api-consultas-medicas
+    build: .
+    image: api-consultas
+    ports: 
+        - 8080:8080
+    environment:
+        DB_URL: jdbc:h2:file:./data/demo
