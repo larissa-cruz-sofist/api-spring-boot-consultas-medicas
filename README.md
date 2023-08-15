@@ -11,7 +11,7 @@ Projeto trabalhado no curso "Spring Boot 3: Desenvolva uma API Rest em Java" da 
      - _Language Support for Java(TM) by Red Hat (Red Hat);_
      - _Lombok Annotations Support for VS Code (Microsoft);_
      - _Maven for Java (Microsoft);_
-     - _Project Manager for Java_
+     - _Project Manager for Java (Microsoft);_
      - _Test Runner for Java (Microsoft);_
      - _Spring Boot Dashboard (Microsoft);_
      - _Spring Boot Extension Pack (VMware);_
