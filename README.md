@@ -1,5 +1,5 @@
 # API Consultas Médicas - Larissa - Patrick
-Projeto trabalhado no curso "Spring Boot 3: Desenvolva uma API Rest em Java" da plataforma de aprendizagem Alura. Projeto voltado a aprendizagem, capaz de cadastrar Médicos, Pacientes e Consultas; bem como, realizar pesquisa por Médico, Paciente e Consultas; atualizar dados de Médico e Paciente; excluir (tornando inativo) o Médico, Paciente e Consultas, anteriormente cadastrados.
+Projeto voltado a aprendizagem, capaz de cadastrar Médicos, Pacientes e Consultas; bem como, realizar pesquisa por Médico, Paciente e Consultas; atualizar dados de Médico e Paciente; excluir (tornando inativo) o Médico, Paciente e Consultas, anteriormente cadastrados.
 
 ## Getting Started
 1. Editar as variáveis de ambiente indicando o Java JDK 17
